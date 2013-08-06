@@ -6,12 +6,11 @@ Post-Deployment Check
 .. contents:: :local:
 
 On occasion, even a successful deployment may result in some OpenStack 
-components not working correctly. If this happens, Fuel offers the 
-ability to perform post-deployment checks to verify operations. Part of Fuel's 
-goal is to provide easily accessible status information about the most commonly 
-used components and the most recently performed actions. 
-To perform these checks you will use Sanity and Smoke checks, as described 
-below:
+components not working correctly. If this happens, Fuel offers the ability 
+to perform post-deployment checks to verify operations. Part of Fuel's goal 
+is to provide easily accessible status information about the most commonly 
+used components and the most recently performed actions. To perform these 
+checks you will use Sanity and Smoke checks, as described below:
 
 **Sanity Checks**
   Reveal whether the overall system is functional. If it fails, you will most 
@@ -86,12 +85,13 @@ An actual test run looks like this:
 
 .. image::  /_images/ostf_screen.jpg
 
-What should be done when a test failed 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+What to do when a test fails 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If a test failed, there are several ways to investigate the problem. You may 
+If a test fails, there are several ways to investigate the problem. You may 
 prefer to start in Fuel UI since it's feedback is directly related to the 
-health of the deployment. To do so, start by checking the following:
+health of the deployment. You can check on the status of issues in the 
+following sections of Fuel UI:
 
 * Under the `Healthcheck` tab
 * In the OpenStack dashboard
@@ -107,13 +107,14 @@ dig deep. The most common issues are:
 * Something has been broken in the network configuration
 * There is a general lack of resources (memory/disk space)
 
-The first thing to be done is to ensure all OpenStack services are up and running.
-To do this you can run sanity test set, or execute the following command on your 
-controller node::
+The first thing to be done is to ensure all OpenStack services are up and 
+running. To do this you can run sanity test set, or execute the following 
+command on your controller node::
 
     nova-manage service list
 
-If any service is off (has “XXX” status), you can restart it using this command::
+If any service is off (has “XXX” status), you can restart it using this 
+command::
 
     service openstack-<service name> restart
 
@@ -209,8 +210,8 @@ what test is used for each service:
 
 .. topic:: Services execution monitoring
 
-    Test checks that all of the expected services are on, meaning the test will 
-    fail if any of the listed services is in “XXX” status. 
+	Test checks that all of the expected services are on, meaning the test 
+	will fail if any of the listed services is in “XXX” status. 
 
     Test scenario:
 
@@ -296,17 +297,17 @@ negatives. The following is a description of each sanity test available:
     9. Check volume has "available" status.
     10. Delete volume.
 
-    If you see that created volume is in ERROR status, it can mean that you`ve 
-    exceeded the maximum number of volumes that can be created. You can check it 
-    on OpenStack dashboard. For more information refer to volume management 
-    instructions.
+	If you see that created volume is in ERROR status, it can mean that 
+	you`ve exceeded the maximum number of volumes that can be created. You 
+	can check it on OpenStack dashboard. For more information refer to 
+	volume management instructions.
 
 .. topic:: Instance booting and snapshotting
 
-    Test creates a keypair, checks that instance can be booted from default 
-    image, then a snapshot can be created from it and a new instance can be 
-    booted from a snapshot.  Test also verifies that instances and images reach 
-    ACTIVE state upon their creation. 
+	Test creates a keypair, checks that instance can be booted from default 
+	image, then a snapshot can be created from it and a new instance can be 
+	booted from a snapshot.  Test also verifies that instances and images 
+	reach ACTIVE state upon their creation. 
 
     Target component: Glance
 
@@ -317,10 +318,11 @@ negatives. The following is a description of each sanity test available:
     3. Make snapshot of created server.
     4. Boot another instance from created snapshot.
  
-    If you see that created instance is in ERROR status, it can mean that you`ve 
-    exceeded any system requirements limit. The test is using a nano-flavor with 
-    parameters: 64 RAM, 1 GB disk space, 1 virtual CPU presented. For more 
-    information refer to nova cli reference, image management instructions.
+	If you see that created instance is in ERROR status, it can mean that 
+	you`ve exceeded any system requirements limit. The test is using a 
+	nano-flavor with parameters: 64 RAM, 1 GB disk space, 1 virtual CPU 
+	presented. For more information refer to nova cli reference, image 
+	management instructions.
 
 .. topic:: Keypair creation
 
@@ -394,9 +396,9 @@ negatives. The following is a description of each sanity test available:
     3. Create instance with usage of created sec group and keypair.
     4. Check connectivity for all floating ips using ping command.
 
-    If this test failed, it`s better to run a network check and verify that all 
-    connections are correct. For more information refer to the Nova CLI reference's
-    floating IPs management instructions.
+	If this test failed, it`s better to run a network check and verify that 
+	all connections are correct. For more information refer to the Nova CLI 
+	reference's floating IPs management instructions.
 
 .. topic:: User creation and authentication in Horizon
 
@@ -416,7 +418,7 @@ negatives. The following is a description of each sanity test available:
     9. Send authentication request to Horizon.
     10. Verify response status is 200.
 
-    If this test fails on the authentication step, you should first try opening 
-    the dashboard - it may be unreachable for some reason and then you should 
-    check your network configuration. For more information refer to nova cli 
-    reference.
+	If this test fails on the authentication step, you should first try 
+	opening the dashboard - it may be unreachable for some reason and then 
+	you should check your network configuration. For more information refer 
+	to nova cli reference.

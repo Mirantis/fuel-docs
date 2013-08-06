@@ -27,19 +27,20 @@ components that make up OpenStack directly, you instead use a configuration
 management system like Puppet to create scripts that can provide a 
 configurable, reproducible, sharable installation process.
 
-In practice, that means that the process of using Fuel looks like 1-2-3:
+In practice, Fuel works as follows:
 
-1. First, set up Fuel Master Node using the ISO. This process only needs to be 
-   completed once per installation.
+1. First, set up Fuel Master Node using the ISO. This process only needs to 
+be completed once per installation.
 
-2. Next, discover your virtual or phisical nodes and configure your OpenStack 
-   cluster using the Fuel UI.
+2. Next, discover your virtual or phisical nodes and configure your 
+OpenStack cluster using the Fuel UI.
 
-3. Finally, deploy your OpenStack cluster on discovered nodes. Fuel will do all 
-   deployment magic for you by applying pre-configured Puppet manifests. 
+3. Finally, deploy your OpenStack cluster on discovered nodes. Fuel will 
+perform all deployment magic for you by applying pre-configured Puppet 
+manifests. 
 
-All of this is desgined to enable you to maintain your cluster while giving 
-you the flexibility to adapt it to your own configuration.
+Fuel is desgined to enable you to maintain your cluster while giving you the 
+flexibility to adapt it to your own configuration.
 
 .. image:: /_images/how-it-works_svg.jpg
 

@@ -98,6 +98,88 @@ identities. You can do this in two ways:
 - Get discovered nodes JSON file by issuing GET HTTP request to 
   http://<master_ip>:8000/api/nodes/
 
+Calculating Partitioning of the Nodes
+-------------------------------------
+
+In order to provision nodes, you need to calculate 
+partitioning for each particular node. 
+
+Currently, the smallest partitioning scheme includes
+two partitions: **root** and **swap**. These ones
+reside on **os** LVM volume group. If you want
+to have separate partition for glance and swift
+what we strongly suggest you to do, then you need
+to create a partition with mount point '/var/lib/glance'.
+
+If you want th node to work as cinder-volume LVM storage
+you will also need to create 'cinder' (sic! not 'cinder-volumes' 
+due to Anaconda bug) LVM Volume Group.
+
+Partitioning is done by parsing ks_spaces section of node's ks_meta hash.
+Example ks_spaces is pasted below.
+
+Be also aware that the sizes are provided in MiBs and anaconda uses 32MiB
+physical extents for LVM. Thus your LVM PVs size MUST be multiple of 32.
+
+
+   # == ks_spaces
+      # Kickstart data for disk partitioning
+      # The simplest way to calculate is to use REST call to nailgun api,
+      # recalculate disk size into MiB and dump the following config. 
+      # Workflow is as follows:
+      # GET request to http://<fuel-master-node>:8000/api/nodes
+      # Parse JSON and derive disk data from meta['disks']. 
+      # Set explicitly which disk is system and which is for cinder.
+      # $system_disk_size=floor($system_disk_meta['disks']['size']/1048756)
+      # $system_disk_path=$system_disk_meta['disks']['disk']
+      # $cinder_disk_size=floor($cinder_disk_meta['disks']['size']/1048756)
+      #
+      # $cinder_disk_path=$cinder_disk_meta['disks']['disk']
+      #
+      # All further calculations are made in MiB
+      # Calculation of system partitions
+      #
+      # For each node:
+      #    calculate size of physical volume for operating system:
+      #    $pv_size = $system_disk_size - 200 - 1
+      #    declare $swap_size
+      #    calculate size of root partition:
+      #        $free_vg_size = $pv_size - $swap_size
+      #        $free_extents = floor($free_vg_size/32)
+      #        $system_disk_size = 32 * $free_extents 
+      # ks_spaces: '"[
+      #{\"type\": \"disk\", \"id\": \"$system_disk_path\",
+      #\"volumes\":
+      #[
+      # {\"mount\": \"/boot\", \"type\": \"partition\", \"size\": 200},
+      # {\"type\": \"mbr\"},
+      # {\"size\": $pv_size, \"type\": \"pv\", \"vg\": \"os\"}
+      #],
+      #\"size\": $system_disk_size
+      #},
+      #{\"type\": \"vg\", \"id\": \"os\", \"volumes\":
+      #[
+      # {\"mount\": \"/\", \"type\": \"lv\", \"name\": \"root\", \"size\": $system_disk_size },
+      # {\"mount\": \"swap\", \"type\": \"lv\", \"name\": \"swap\", \"size\": $swap_size}
+      #]
+      #},
+      #{\"type\": \"disk\", \"id\": \"$path_to_cinder_disk\",
+      #\"volumes\":
+      #[
+      # {\"type\": \"mbr\"},
+      # {\"size\": $cinder_disk_size, \"type\": \"pv\", \"vg\": \"cinder\"}
+      #],
+      #\"size\": $cinder_disk_size
+      #}
+      #]"'
+      ks_spaces: '"[{\"type\": \"disk\", \"id\": \"disk/by-path/pci-0000:00:06.0-virtio-pci-virtio3\",
+       \"volumes\": [{\"mount\": \"/boot\", \"type\": \"partition\", \"size\": 200},
+       {\"type\": \"mbr\"}, {\"size\": 20000, \"type\": \"pv\", \"vg\": \"os\"}],
+       \"size\": 20480}, {\"type\": \"vg\", \"id\": \"os\", \"volumes\": [{\"mount\":
+       \"/\", \"type\": \"lv\", \"name\": \"root\", \"size\": 10240 }, {\"mount\":
+       \"swap\", \"type\": \"lv\", \"name\": \"swap\", \"size\": 2048}]}]"'
+
+
 Configuring Nodes for Provisioning
 ----------------------------------
 
@@ -207,7 +289,7 @@ Sample YAML configuration for provisioning is listed below:
       #\"volumes\":
       #[
       # {\"type\": \"mbr\"},
-      # {\"size\": $cinder_disk_size, \"type\": \"pv\", \"vg\": \"cinder-volumes\"}
+      # {\"size\": $cinder_disk_size, \"type\": \"pv\", \"vg\": \"cinder\"}
       #],
       #\"size\": $cinder_disk_size
       #}

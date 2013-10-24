@@ -421,8 +421,16 @@ tagging causes issue, they will be further documented.  Currently, a
 known limitation is that untagged networks should not be mapped to 
 the physical network interface that is used for PXE provisioning.
 
+Sanity Tests For Murano And Heat Are Broken
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sanity Tests for Murano and Heat were added to ensure that services
+are operating correctly after OpenStack cluster is deployed.
+Heat, Savanna and Murano services are tested. However due to a bug
+the sanity tests for Heat and Murano are not working properly
+and always fail.
+
 Other Limitations
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 * The Fuel master node is installed with CentOS as the host Operating 
   System.  While OpenStack nodes can be installed with Ubuntu, Red Hat 
   Enterprise Linux or CentOS as the host OS, the Fuel master node is 

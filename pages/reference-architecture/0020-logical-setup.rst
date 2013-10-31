@@ -48,6 +48,9 @@ mechanism for achieving HA:
 * MySQL high availability is achieved through Galera active/active multi-master 
   deployment and Pacemaker.
 * Quantum agents are managed by Pacemaker.
+* Ceph monitors implement their own quorum based HA mechanism and
+  require time synchronization between all nodes. Clock drift higher
+  than 50ms may break the quorum or even crash the Ceph service.
 
 Compute Nodes
 -------------

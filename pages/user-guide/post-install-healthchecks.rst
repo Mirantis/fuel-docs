@@ -60,8 +60,9 @@ Running Post-Deployment Checks
 Now, let`s take a closer look on what should be done to execute the tests and 
 to understand if something is wrong with your OpenStack environment.
 
-.. image::  /_images/healthcheck_tab.jpg
+.. image::  /_images/001-health-check-tab.jpg
   :align: center
+  :width: 100%
 
 As you can see on the image above, the Fuel UI now contains a ``Health Check``
 tab, indicated by the Heart icon.
@@ -89,8 +90,9 @@ this section.
 
 An actual test run looks like this:
 
-.. image::  /_images/ostf_screen.jpg
+.. image::  /_images/002-health-check-results.jpg
   :align: center
+  :width: 100%
 
 What To Do When a Test Fails 
 ----------------------------
@@ -138,148 +140,24 @@ response back from them. Many of these tests are simple in that they ask
 each service for a list of its associated objects and then waits for a 
 response. The response can be something, nothing, an error, or a timeout, 
 so there are several ways to determine if a service is up. The following list 
-shows what test is used for each service:
+includes the suite of sanity tests implemented:
 
-.. topic:: Instance list availability
-
-  Test checks that Nova component can return list of instances. 
-
-  Test scenario:
-
-  1. Request list of instances.
-  2. Check returned list is not empty.
-
-.. topic:: Images list availability
-
-  Test checks that Glance component can return list of images.
-
-  Test scenario: 
-
-  1. Request list of images.
-  2. Check returned list is not empty.
-
-.. topic:: Volume list availability
-
-  Test checks that Swift component can return list of volumes.
-
-  Test scenario:
-
-  1. Request list of volumes.
-  2. Check returned list is not empty.
-
-.. topic:: Snapshots list availability
-
-  Test checks that Glance component can return list of snapshots.
-
-  Test scenario:
-
-  1. Request list of snapshots.
-  2. Check returned list is not empty.
-
-.. topic:: Flavor list availability
-
-  Test checks that Nova component can return list of flavors.
-
-  Test scenario:
-
-  1. Request list of flavors.
-  2. Check returned list is not empty.
-
-.. topic:: Limits list availability
-
-  Test checks that Nova component can return list of absolute limits.
-
-  Test scenario:
-
-  1. Request list of limits.
-  2. Check response.
-
-.. topic:: Services list availability
-
-  Test checks that Nova component can return list of services.
-
-  Test scenario:
-
-  1. Request list of services. 
-  2. Check returned list is not empty.
-
-.. topic:: User list availability
-
-  Test checks that Keystone component can return list of users.
-
-  Test scenario:
-
-  1. Request list of services.
-  2. Check returned list is not empty.
-
-.. topic:: Check all the services execute normally
-
-  Test checks that all of the expected services are on, meaning the test will 
-  fail if any of the listed services is in “XXX” status. 
-
-  Test scenario:
-
-  1. Connect to a controller via SSH.
-  2. Execute nova-manage service list command.
-  3. Check there are no failed services.
-
-.. topic:: Check Internet connectivity from a compute
-
-  Test checks that public Internet is available for compute hosts.
-
-  Test scenario:
-
-  1. Connect to a Compute node via SSH.
-  2. Execute ping command to IP 8.8.8.8.
-  3. Check ping can be successfully completed.
-
-
-.. topic:: Check DNS resolution on a compute
-
-  Test checks that DNS is available for compute hosts.
-
-  Test scenario:
-
-  1. Connect to a Compute node via SSH.
-  2. Execute host command for the controller IP.
-  3. Check DNS name can be successfully resolved.
-
-.. topic:: Networks availability
-
-  Test checks that Nova component can return list of available networks. 
-  
-  Test scenario:
-  
-  1. Request list of networks.
-  2. Check returned list is not empty.
-
-.. topic:: Ports availability
-
-  Test checks that Nova component can return list of available ports.
-
-  Test scenario:
-
-  1. Request list of ports.
-  2. Check returned list is not empty.
-
-.. topic:: Savanna basic test
-
-  Test checks that Savanna can work with templates.
-
-  Test scenario:
-
-  1. Create a Nova flavor for Savanna VMs.
-  2. Create a node group template for the TaskTracker and DataNode processes.
-  3. Create a node group template for the TaskTracker process.
-  4. Create a node group template for the DataNode process.
-  5. Create a cluster template using the node group templates.
-  6. List current node group templates.
-  7. List current cluster templates.
-  8. Delete the created cluster template.
-  9. Delete the created node group templates.
-  10. Delete the created flavor.
-
-For more information refer to nova cli reference.
+* Instance list availability
+* Images list availability
+* Volume list availability
+* Snapshots list availability
+* Flavor list availability
+* Limits list availability
+* Services list availability
+* User list availability
+* Stack list availability
+* Check all the services execute normally
+* Check Internet connectivity from a compute
+* Check DNS resolution on a compute
+* Check Default Key Pair 'murano-lb-key' For Server Farms
+* Check Windows Image With Murano Tag
+* Murano environment and service creation, listing and deletion
+* Networks availability
 
 Smoke Tests Description 
 -----------------------
@@ -296,171 +174,37 @@ is recommended to run all sanity checks prior to your smoke checks to determine
 that all services are alive. This helps ensure that you don't get any false 
 negatives. The following is a description of each sanity test available:
 
-.. topic:: Flavor creation
+* Create instance flavor
+* Create instance volume
+* Launch instance, create snapshot, launch instance from snapshot
+* Keypair creation
+* Security group creation
+* Check networks parameters
+* Launch instance
+* Assign floating IP
+* Check that VM is accessible via floating IP address
+* Check network connectivity from instance via floating IP
+* Check network connectivity from instance without floating IP
+* User creation and authentication in Horizon
 
-  Test checks that low requirements flavor can be created.
+Additional Checks
+-----------------
+If you have installed OpenStack as a High Availability (HA) architecture
+or have installed related OpenStack projects like Savanna or Murano, 
+additional tests will be shown. The following are the tests available
+in HA mode:
 
-  Target component: Nova
-
-  Scenario:
-
-  1. Create small-size flavor.
-  2. Check created flavor has expected name.
-  3. Check flavor disk has expected size.
-
-  For more information refer to nova CLI documentation.
-
-.. topic:: Volume creation
-
-  Test checks that a small-sized volume can be created.
-
-  Target component: Compute
-
-  Scenario:
-
-  1. Create a new small-size volume.
-  2. Wait for "available" volume status.
-  3. Check response contains "display_name" section.
-  4. Create instance and wait for "Active" status
-  5. Attach volume to instance.
-  6. Check volume status is "in use".
-  7. Get created volume information by its id.
-  8. Detach volume from instance.
-  9. Check volume has "available" status.
-  10. Delete volume.
-
-  If you see that created volume is in ERROR status, it can mean that you`ve 
-  exceeded the maximum number of volumes that can be created. You can check it 
-  on OpenStack dashboard. For more information refer to volume management 
-  instructions.
-
-.. topic:: Instance booting and snapshotting
-
-  Test creates a keypair, checks that instance can be booted from default 
-  image, then a snapshot can be created from it and a new instance can be 
-  booted from a snapshot.  Test also verifies that instances and images reach 
-  ACTIVE state upon their creation. 
-
-  Target component: Glance
-
-  Scenario:
-
-  1. Create new keypair to boot an instance.
-  2. Boot default image.
-  3. Make snapshot of created server.
-  4. Boot another instance from created snapshot.
-
-  If you see that created instance is in ERROR status, it can mean that you`ve 
-  exceeded any system requirements limit. The test is using a nano-flavor with 
-  parameters: 64 RAM, 1 GB disk space, 1 virtual CPU presented. For more 
-  information refer to nova cli reference, image management instructions.
-
-.. topic:: Keypair creation
-
-  Target component: Nova.
-
-  Scenario:
-
-  1. Create a new keypair, check if it was created successfully 
-     (check name is expected, response status is 200).
-
-  For more information refer to nova cli reference.
-
-.. topic:: Security group creation
-
-  Target component: Nova
-
-  Scenario:
-
-  1. Create security group, check if it was created correctly 
-     (check name is expected, response status is 200).
-
-  For more information refer to nova cli reference.
-
-.. topic:: Network parameters check
-
-  Target component: Nova
-
-  Scenario:
-
-  1. Get list of networks.
-  2. Check seen network labels equal to expected ones.
-  3. Check seen network ids equal to expected ones.
-
-  For more information refer to nova cli reference.
-
-.. topic:: Instance creation
-
-  Target component: Nova
-
-  Scenario:
-
-  1. Create new keypair (if it`s nonexistent yet).
-  2. Create new sec group (if it`s nonexistent yet).
-  3. Create instance with usage of created sec group and keypair.
-
-  For more information refer to nova cli reference, instance management 
-  instructions.
-
-.. topic:: Floating IP assignment
-
-  Target component: Nova
-
-  Scenario:
-
-  1. Create new keypair (if it`s nonexistent yet).
-  2. Create new sec group (if it`s nonexistent yet).
-  3. Create instance with usage of created sec group and keypair.
-  4. Create new floating IP.
-  5. Assign floating IP to created instance.
-  
-  For more information refer to nova cli reference, floating ips management 
-  instructions.
-
-.. topic:: Network connectivity check through floating IP
-
-  Target component: Nova
-
-  Scenario:
-
-  1. Create new keypair (if it`s nonexistent yet).
-  2. Create new sec group (if it`s nonexistent yet).
-  3. Create instance with usage of created sec group and keypair.
-  4. Check connectivity for all floating IPs using ping command.
-
-  If this test failed, it`s better to run a network check and verify that all 
-  connections are correct. For more information refer to the Nova CLI reference's
-  floating IPs management instructions.
-
-.. topic:: User creation and authentication in Horizon
-
-  Test creates new user, tenant, user role with admin privileges and logs in 
-  to dashboard. 
-  
-  Target components: Nova, Keystone
-
-  Scenario:
-
-  1. Create a new tenant.
-  2. Check tenant was created successfully.
-  3. Create a new user.
-  4. Check user was created successfully.
-  5. Create a new user role.
-  6. Check user role was created successfully.
-  7. Perform token authentication.
-  8. Check authentication was successful.
-  9. Send authentication request to Horizon.
-  10. Verify response status is 200.
-
-  If this test fails on the authentication step, you should first try opening 
-  the dashboard - it may be unreachable for some reason and then you should 
-  check your network configuration. For more information refer to nova cli 
-  reference.
+* Check data replication over mysql
+* Check amount of tables in os databases is the same on each node
+* Check mysql environment state
+* Check galera environment state
+* RabbitMQ availability
 
 Platform Tests Description
 --------------------------
 
-Platform tests verify basic functionality of Heat, Savanna and Murano services.
+Platform tests verify basic functionality of Heat, Savanna and Murano
+services.
 Typically, preparation for Savanna testing is a lengthy process that
 involves several manual configuration steps.
 
@@ -476,7 +220,8 @@ The platform tests are run in the tenant you've specified in
 2. Get an image with Hadoop for Savanna and register it with Savanna.
 
    * First download the following image:
-     http://savanna-files.mirantis.com/savanna-0.2-vanilla-1.1.2-ubuntu-12.10.qcow2
+
+http://savanna-files.mirantis.com/savanna-0.2-vanilla-1.1.2-ubuntu-12.10.qcow2
    * Then upload the image into OpenStack Image Service (Glance) into
      'admin' tenant and name it 'savanna'.
    * In OpenStack Dashboard (Horizon) access 'Savanna' tab.
@@ -490,6 +235,32 @@ The platform tests are run in the tenant you've specified in
    * Finally push ‘Done’ button
 
 After the steps above are done, the Savanna is ready to be tested.
+
+Preparing Murano for Testing
++++++++++++++++++++++++++++++
+
+The platform tests are run in the tenant you've specified in
+'OpenStack Settings' tab during OpenStack installation.
+The 'admin' tenant is selected by default.
+
+To prepare Murano for testing:
+
+1. Configure key pair 'murano-lb-key' in the 'admin' tenant.
+2. Create a Windows image with Murano agent. 
+   See `Murano documentation <http://murano-docs.github.io/latest/administrators-guide/content/ch03.html>`_
+3. Upload the image to the OpenStack Image Service (Glance) into the 'admin' tenant.
+4. Rename the image name to 'ws-2012-std'.
+5. In the OpenStack Dashboard, click the 'Project' tab.
+6. Switch to admin tenant if needed.
+7. Click the 'Environments' menu.
+8. Click the 'Marked Images' button.
+9. Click 'Mark Image'. The Image registration window displays.
+10. Select the image.
+11. In the 'Title' field, select 'ws-2012-std'.
+12. Select the 'Windows Server 2012' type. 
+13. Click 'Mark'.
+
+Murano is ready for testing.
 
 Platform Tests Details
 ++++++++++++++++++++++
@@ -517,4 +288,167 @@ Platform Tests Details
   11. Delete the created flavor.
 
   For more information, see:
-  `Savanna documentation <http://savanna.readthedocs.org/en/0.2.2/>`_
+  `Savanna documentation <http://savanna.readthedocs.org/en/0.2.2/>`_ 
+
+.. topic:: Create stack, check its details, then update and delete stack
+
+  The test verifies that the Heat service can create, launch, and delete a stack.
+
+  Target component: Heat
+
+  Scenario:
+
+  1. Create stack.
+  2. Wait for stack status to become 'CREATE_COMPLETE'.
+  3. Get details of the created stack by its name.
+  4. Update stack.
+  5. Wait for stack to be updated.
+  6. Delete stack.
+  7. Wait for stack to be deleted.
+
+.. topic:: Murano environment with AD service deployment
+
+  The test verifies that the Murano service can create and deploy the Active Directory service.
+
+  Target component: Murano
+
+  Scenario:
+
+  1. Check Windows Server 2012 image in glance.
+  2. Send request to create environment.
+  3. Send request to create session for environment.
+  4. Send request to create service AD.
+  5. Request to deploy session.
+  6. Checking environment status.
+  7. Checking deployments status
+  8. Send request to delete environment.
+
+  For more infromation, see:
+  `Murano documentation <https://wiki.openstack.org/wiki/Murano#Documentation>`_
+
+.. topic:: Murano environment with ASP.NET application service deployment
+
+  The test verifies that the Murano service can create and deploy the ASP.NET service.
+
+  Target component: Murano
+
+  Scenario:
+
+  1. Check Windows Server 2012 image in glance.
+  2. Send request to create environment.
+  3. Send request to create session for environment.
+  4. Send request to create service ASPNet.
+  5. Request to deploy session.
+  6. Checking environment status.
+  7. Checking deployments status
+  8. Send request to delete environment.
+
+  For more infromation, see:
+  `Murano documentation <https://wiki.openstack.org/wiki/Murano#Documentation>`_
+
+.. topic:: Murano environment with ASP.NET Servers Farm service deployment
+
+  The test verifies that the Murano service can create and deploy the ASP.NET Servers Farm service.
+
+  Target component: Murano
+
+  Scenario:
+
+  1. Check Windows Server 2012 image in glance.
+  2. Check that Key Pair 'murano-lb-key' exists.
+  3. Send request to create environment.
+  4. Send request to create session for environment.
+  5. Send request to create service ASPNet farm.
+  6. Request to deploy session.
+  7. Checking environment status.
+  8. Checking deployments status
+  9. Send request to delete environment.
+
+  For more infromation, see:
+  `Murano documentation <https://wiki.openstack.org/wiki/Murano#Documentation>`_
+
+.. topic:: Murano environment with IIS service deployment
+
+  The test verifies that the Murano service can create and deploy the IIS service.
+
+  Target component: Murano
+
+  Scenario:
+
+  1. Check Windows Server 2012 image in glance.
+  2. Send request to create environment.
+  3. Send request to create session for environment.
+  4. Send request to create service IIS.
+  5. Request to deploy session.
+  6. Checking environment status.
+  7. Checking deployments status
+  8. Send request to delete environment.
+
+  For more infromation, see:
+  `Murano documentation <https://wiki.openstack.org/wiki/Murano#Documentation>`_
+
+.. topic:: Murano environment with IIS Servers Farm service deployment
+
+  The test verifies that the Murano service can create and deploy the IIS Servers Farm service.
+
+  Target component: Murano
+
+  Scenario:
+
+  1. Check Windows Server 2012 image in glance.
+  2. Check that Key Pair 'murano-lb-key' exists.
+  3. Send request to create environment.
+  4. Send request to create session for environment.
+  5. Send request to create service IIS farm.
+  6. Request to deploy session.
+  7. Checking environment status.
+  8. Checking deployments status
+  9. Send request to delete environment.
+
+  For more infromation, see:
+  `Murano documentation <https://wiki.openstack.org/wiki/Murano#Documentation>`_
+
+.. topic:: Murano environment with SQL service deployment
+
+  The test verifies that the Murano service can create and deploy the SQL service.
+
+  Target component: Murano
+
+  Scenario:
+
+  1. Check Windows Server 2012 image in glance.
+  2. Send request to create environment.
+  3. Send request to create session for environment.
+  4. Send request to create service SQL.
+  5. Request to deploy session.
+  6. Checking environment status.
+  7. Checking deployments status
+  8. Send request to delete environment.
+
+  For more infromation, see:
+  `Murano documentation <https://wiki.openstack.org/wiki/Murano#Documentation>`_
+
+.. topic:: Murano environment with SQL Cluster service deployment
+
+  The test verifies that the Murano service can create and deploy the SQL Cluster service.
+
+  Target component: Murano
+
+  Scenario:
+
+  1. Check Windows Server 2012 image in glance.
+  2. Send request to create environment.
+  3. Send request to create session for environment.
+  4. Send request to create service AD.
+  5. Request to deploy session.
+  6. Checking environment status.
+  7. Checking deployments status.
+  8. Send request to create session for environment.
+  9. Send request to create service SQL cluster.
+  10. Request to deploy session..
+  11. Checking environment status.
+  12. Checking deployments status.
+  13. Send request to delete environment.
+
+  For more infromation, see:
+  `Murano documentation <https://wiki.openstack.org/wiki/Murano#Documentation>`_

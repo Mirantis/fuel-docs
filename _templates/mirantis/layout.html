@@ -1,0 +1,147 @@
+{#
+    cloud/layout.html
+    ~~~~~~~~~~~~~~~~~
+
+    Sphinx layout template for the cloud theme.
+
+    :copyright: Copyright 2009-2011 Assurance Technologies LLC
+    :license: BSD
+
+    roottarget - optional target for root link (default to toc)
+    logotarget - optional target for logo link (defaults to root target)
+    googleanalytics_id - if set, enabled google analytics snippet & footer
+    googleanalytics_path - optional subpatch for GA cookie
+    collapsiblesidebar - enable collapsible sidebar support
+
+#}
+
+{% extends "basic/layout.html" %}
+
+{% set reldelim2 = reldim2 is not defined and ' &nbsp; &nbsp;' or reldelim2 %}
+
+{# add script file to instrument collapsable sections  and other features #}
+{% set script_files = script_files + ['_static/jquery.cookie.js',
+                                      '_static/cloud.js', '_static/menu.js'] %}
+
+{# add font stylesheets #}
+{% set css_files = css_files + [theme_fontcssurl] %}
+
+{# make root link redirectable #}
+{%- set theme_roottarget = (theme_roottarget == "<toc>" and master_doc or theme_roottarget) %}
+{% block rootrellink %}
+    <li><a href="{{ pathto(theme_roottarget) }}">{{shorttitle|e}}</a>{{reldelim1}}</li>
+{% endblock %}
+
+{# make logo link redirectable #}
+{%- set theme_logotarget = (theme_logotarget == "<root>" and theme_roottarget or (theme_logotarget == "<toc>" and master_doc or theme_logotarget)) %}
+{%- block sidebarlogo %}
+    {%- if logo %}
+        <p class="logo"><a href="{{ pathto(theme_logotarget) }}" title="{{ theme_logotarget }}">
+          <img class="logo" src="{{ pathto('_static/' + logo, 1) }}" alt="Logo"/>
+        </a></p>
+    {%- endif %}
+{%- endblock %}
+
+{# wrap relbars in distinct classes to make themeing easier #}
+{%- block relbar1 %}
+    <div class="relbar-top">
+        {{ super() }}
+    </div>
+{% endblock %}
+
+{%- block relbar2 %}
+    <div class="relbar-bottom">
+        {{ super() }}
+    </div>
+{% endblock %}
+
+{% block extrahead -%}
+        {{ super() }}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {%- if theme_googleanalytics_id -%}
+<script type="text/javascript">
+var ga_enabled = !$.cookie('disable-ga');
+if(ga_enabled){
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '{{ theme_googleanalytics_id }}']);
+  _gaq.push('_setDomainName', '{{ theme_googleanalytics_domain }}');
+  _gaq.push('_trackPageview');
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+}
+</script>
+        {%- endif %}
+{%- endblock %}
+
+{% block header %}
+    <div id="masthead">
+        <div id="globalNav">
+            <div id="globalLink">
+                <a href="http://software.mirantis.com/" id="gl1" class="glink active" name="gl1">Software</a>
+                <a href="http://www.mirantis.com/openstack-services/" id="gl2" class="glink"  name="gl2">Services</a>
+                <a href="http://training.mirantis.com" id="gl3" class="glink" name="gl3">Training</a>
+                <a href="http://www.mirantis.com/openstack/" id="gl4" class="glink"  name="gl4">OpenStack</a>
+                <a href="http://www.mirantis.com/openstack-use-cases/" id="gl5" class="glink" name="gl5">Use Cases</a>
+                <a href="http://www.mirantis.com/company/" id="gl6" class="glink" name="gl6">Company</a>
+            </div>
+        </div>
+
+        <div id="subglobal1" class="subglobalNav" style="visibility: hidden;">
+			<div class="subglobal_vis">
+				<a href="http://software.mirantis.com/">Downloads</a>
+				<a href="http://software.mirantis.com/core-openstack/">Core OpenStack</a>
+				<a href="http://software.mirantis.com/key-related-openstack-projects/">Key Related Projects</a>
+				<a href="http://software.mirantis.com/plugins-and-drivers/">Plugins & Drivers</a>
+			</div>
+        </div>
+
+        <div id="subglobal2" class="subglobalNav" style="visibility: hidden;">
+			<div class="subglobal_vis">
+				<a href="http://www.mirantis.com/openstack-services/solutions-engineering/">Solutions Engineering</a>
+				<a href="http://www.mirantis.com/openstack-services/custom-deployment/">Custom Deployment</a>
+				<a href="http://www.mirantis.com/openstack-services/custom-support/">Custom Support</a>
+				<a href="http://www.mirantis.com/openstack-services/driver-development/">Drivers</a>
+			</div>	
+		</div>
+
+        <div id="subglobal5" class="subglobalNav" style="visibility: hidden;">
+			<div class="subglobal_vis">
+				<a href="http://www.mirantis.com/openstack-use-cases/saas-web/">SaaS/Web Vendors</a>
+				<a href="http://www.mirantis.com/openstack-use-cases/service-providers/">Service Providers</a>
+				<a href="http://www.mirantis.com/openstack-use-cases/enterprise-private-cloud/">Enterprise Cloud</a>
+				<a href="http://www.mirantis.com/openstack-use-cases/infrastructure-technology/">Infrastructure Vendors</a>
+			</div>
+		</div>
+
+        <div id="subglobal6" class="subglobalNav" style="visibility: hidden;">
+			<div class="subglobal_vis">
+				<a href="http://www.mirantis.com/company/about/">About</a>
+				<a href="http://www.mirantis.com/company/our-philosophy/">Our Philosophy</a>
+				<a href="http://www.mirantis.com/company/customer-successes/">Customer Successes</a>
+				<a href="http://www.mirantis.com/company/leadership/">Leadership</a>
+				<a href="http://www.mirantis.com/company/investors/">Investors</a>
+				<a href="http://www.mirantis.com/company/press-center/info/">Press Center</a>
+			</div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer -%}
+    {{ super() }}
+    {%- if theme_googleanalytics_id -%}
+<script type="text/javascript">
+    if(ga_enabled){
+        document.write("<div class=\"footer\">This page uses <a href=\"http://analytics.google.com\">Google Analytics</a> to collect statistics. ");
+        document.write("Click <button title=\"set cookie to disable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', 'true', {expires: 3650, path: '{{ theme_googleanalytics_path }}'}); window.location.reload(); return false; \">here</button> to disable analytics for this site.");
+        document.write("</div>");
+    }else{
+        document.write("<div class=\"footer\">Google Analytics has been disabled. ");
+        document.write("Click <button title=\"set cookie to re-enable analytics for this site\" class=\"link\" onclick=\"$.cookie('disable-ga', null, {path: '{{ theme_googleanalytics_path }}'}); window.location.reload(); return false; \">here</button> to re-enable analytics for this site.");
+    };
+</script>
+    {%- endif %}
+    <!-- cloud_sptheme 1.4 -->
+{%- endblock %}

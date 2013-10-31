@@ -20,32 +20,39 @@ As you know, OpenStack provides the following basic services:
 **Compute:**
   Compute servers are the workhorses of your installation; they're 
   the servers on which your users' virtual machines are created. 
-  `nova-compute` controls the life-cycle of these VMs.
+  `nova-compute` controls the life cycle of these VMs.
 
 **Networking:**
-  Because an OpenStack environment (virtually) always includes 
-  multiple servers, the ability for them to communicate with each other and with 
-  the outside world is crucial. Networking was originally handled by the 
-  `nova-network` service, but it has given way to the newer Neutron (formerly 
-  Quantum) networking service. `nova-network` still has some advantages over Neutron,
-  and it is supported by Fuel in both Flat-DHCP and VLAN modes.
+  Typically, an OpenStack environment includes multiple servers that
+  need to communicate to each other and to outside world. Fuel supports
+  both old `nova-network` and new `neutron` based OpenStack Networking
+  implementations:
+
+  * With `nova-network`, Flat-DHCP and VLAN modes are available.
+
+  * With `neutron`, GRE tunnels or VLANs can be used for network
+    segmentation.
 
 **Storage:**
-  OpenStack provides for two different types of storage: block 
-  storage and object storage. Block storage is traditional data storage, with 
-  small, fixed-size blocks that are mapped to locations on storage media. At its 
-  simplest level, OpenStack provides block storage using `nova-volume`, but it 
-  is common to use `cinder`.
+  OpenStack requires block and object storage to be provisioned. Fuel
+  provides the following storage options out of the box:
 
-  Object storage, on the other hand, consists of single variable-size objects 
-  that are described by system-level metadata, and you can access this capability 
-  using `swift`.
+  * Cinder LVM provides persistent block storage to virtual machines
+    over iSCSI protocol
 
-  OpenStack storage is used for your users' objects, but it is also used for 
-  storing the images used to create new VMs. This capability is handled by `glance`.
+  * Swift object store can be used by Glance to store VM images and
+    snapshots, it may also be used directly by applications
 
-These services can be combined in many different ways. Out of the box,
-Fuel supports the following deployment configurations:
+  * Ceph combines object and block storage and can replace either one or
+    both of the above.
+
+  Unlike Swift and Ceph, Cinder LVM doesn't implement data redundancy,
+  you should use Ceph for volumes if you need your block storage to be
+  resilient.
+
+Compute, Networking, and Storage services can be combined in many
+different ways. Out of the box, Fuel supports the following deployment
+configurations:
 
 - :ref:`Multi-node <Multi-node>`
 - :ref:`Multi-node with HA <Multi-node_HA>`

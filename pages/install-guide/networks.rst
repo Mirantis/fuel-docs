@@ -4,6 +4,9 @@
 
 .. index:: Fuel UI: Network Configuration
 
+.. _fuelui-network:
+
+
 Understanding and Configuring the Network
 =========================================
 
@@ -133,11 +136,12 @@ Mapping logical networks to physical interfaces on servers
 
 Fuel allows you to use different physical interfaces to handle different 
 types of traffic. When a node is added to the environment, click at the bottom 
-line of the node icon. In the detailed information window, click the "Network 
-Configuration" button to open the physical interfaces configuration screen.
+line of the node icon. In the detailed information window, click the "Configure 
+Interfaces" button to open the physical interfaces configuration screen.
 
-.. image:: /_images/network-settings.jpg
+.. image:: /_images/network_settings.jpg
   :align: center
+  :width: 100%
 
 On this screen you can drag-and-drop logical networks to physical interfaces 
 according to your network setup. 
@@ -162,7 +166,8 @@ First of all, you should configure access ports to allow non-tagged PXE booting
 connections from all Slave nodes to the Fuel node. We refer this network 
 as the Fuel network.
 By default, the Fuel Master node uses the `eth0` interface to serve PXE 
-requests on this network.
+requests on this network, but this can be changed :ref:`during installation 
+<Network_Install>` of the Fuel Master node.
 So if that's left unchanged, you have to set the switch port for `eth0` of Fuel 
 Master node to access mode.
 We recommend that you use the `eth0` interfaces of all other nodes for PXE booting 
@@ -266,6 +271,7 @@ Public and Floating networks which will allow to make this happen.
 
 .. image:: /_images/vbox_public_settings.jpg
   :align: center
+  :width: 100%
 
 By default Public and Floating networks are run on the first network interface.
 It is required to change it, as you can see on this image below. Make sure you change
@@ -273,6 +279,7 @@ it on every node.
 
 .. image:: /_images/vbox_node_settings.jpg
   :align: center
+  :width: 100%
 
 If you use default configuration in VirtualBox scripts, and follow the exact same
 settings on the images above, you should be able to access OpenStack Horizon via

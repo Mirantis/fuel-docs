@@ -421,6 +421,13 @@ It’s possible to add new compute and Cinder nodes to an existing
 OpenStack environment. However, this capability can not be used yet 
 to deploy additional controller nodes in HA mode.
 
+Limitation of using VLAN for external networking
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When you use a VLAN for external networking, verify that network switch 
+or router is configured to tag incoming untagged packets as the 
+configured VLAN and untag the outgoing packets. Otherwise, VNC Proxy may not 
+connect.
+
 Ability to deploy properly in networks that are not utilizing VLAN tagging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 While included in Fuel and fully supported, network environments can 

@@ -249,7 +249,7 @@ in the Fuel UI that enables registration of Fuel once it has been
 installed.  This registration activates the 30 day complimentary 
 basic subscription support, enabling evaluation customers to contact 
 Mirantis world-class support via the 
-`Mirantis support portal<https://mirantis.zendesk.com/home>`_ with 
+`Mirantis support portal <https://mirantis.zendesk.com/home>`_ with 
 questions or issues. 
 
 Extended configuration menu during Fuel Master Node install for network settings

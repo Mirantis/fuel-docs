@@ -3,7 +3,7 @@
         .. cssclass:: header-table
         
         +-------------------------------------+-----------------------------------+
-        | Fuel 3.2 for OpenStack              |                .. cssclass:: right|
+        | Fuel 3.2.1 for OpenStack              |                .. cssclass:: right|
         |                                     |                                   |
         |                                     |                     Release Notes |
         +-------------------------------------+-----------------------------------+

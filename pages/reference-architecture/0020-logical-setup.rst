@@ -9,19 +9,20 @@ HA Logical Setup
 
 .. contents :local:
 
-An OpenStack Multi-node HA environment involves, at a minimum, three types of 
-nodes: controller nodes, compute nodes, and storage nodes.
+An OpenStack Multi-node HA environment involves three types of nodes:
+controller nodes, compute nodes, and storage nodes.
 
 Controller Nodes
 ----------------
 
 The first order of business in achieving high availability (HA) is
 redundancy, so the first step is to provide multiple controller nodes.
-You must keep in mind, however, that the database uses Galera to
-achieve HA, and Galera is a quorum-based system. That means that you must provide 
-at least 3 controller nodes.
 
-.. image:: /_images/logical-diagram-controller.svg
+As you may recall, the database uses Galera to achieve HA, and Galera is
+a quorum-based system. That means that you should have at least 3
+controller nodes.
+
+.. image:: /_images/logical-diagram-controller_svg.jpg
   :align: center
 
 Every OpenStack controller runs HAProxy, which manages a single External
@@ -69,12 +70,31 @@ controller nodes using the VIP and going through HAProxy.
 Storage Nodes
 -------------
 
-In this OpenStack environment reference architecture, shared storage acts
-as a backend for Glance, so that multiple Glance instances running on
-controller nodes can store images and retrieve images from it. To
-achieve this, you are going to deploy Swift. This enables you to use
-it not only for storing VM images, but also for any other objects such
-as user files.
+Depending on the :ref:`storage options <Storage_Architecture>` you
+select for your environment, you may have Ceph, Cinder, and Swift
+services running on your storage nodes.
+
+Ceph_ implements its own HA, all you need is enough controller nodes
+running Ceph Monitor service to `form a quorum
+<http://ceph.com/docs/master/rados/troubleshooting/troubleshooting-mon/>`_,
+and enough Ceph OSD nodes to satisfy the `object replication factor
+<http://ceph.com/docs/master/rados/operations/pools/>`_.
+
+.. _Ceph: http://ceph.com/docs/master/architecture/
+
+Swift Storage and Proxy services also can run on controller nodes. This
+reduces the minimum number of nodes required to create a small OpenStack
+environment, but for a larger production environment you will need
+dedicated nodes: two for Swift Proxy and at least three for Swift
+Storage. Swift API relies on the same HAProxy setup with VIP on
+controller nodes as the other REST APIs.
 
 .. image:: /_images/logical-diagram-storage_svg.jpg
   :align: center
+
+If you select Cinder LVM as the block storage backend for Cinder
+volumes, you should have at least one Cinder LVM node. Unlike Swift and
+Ceph, Cinder LVM doesn't implement data redundancy across nodes: if a
+Cinder node is lost, volumes stored on that node cannot be recovered
+from the data stored on other Cinder nodes. If you need your block
+storage to be resilient, use Ceph for volumes.

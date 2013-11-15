@@ -82,6 +82,9 @@ and enough Ceph OSD nodes to satisfy the `object replication factor
 
 .. _Ceph: http://ceph.com/docs/master/architecture/
 
+.. image:: /_images/ceph_nodes_svg.jpg
+  :align: center
+
 Swift Storage and Proxy services also can run on controller nodes. This
 reduces the minimum number of nodes required to create a small OpenStack
 environment, but for a larger production environment you will need

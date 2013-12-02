@@ -110,33 +110,48 @@ accordingly. The diagram below shows an example configuration.
 
 Fuel operates with following logical networks:
 
-**Fuel** network 
-  Used for internal Fuel communications only and PXE booting (untagged on the scheme);
+**Admin (PXE)** network 
+  Physical network used for internal Fuel communications only and PXE booting 
+  (untagged on the scheme);
 
-**Public** network 
-  Is used to get access from virtual machines to outside, Internet or office 
-  network (VLAN 101 on the scheme);
+**Public** (**External**) network 
+  Virtual OpenStack network. May be mapped to detached physical interface. 
+  Is used to get access from virtual machines to outside, 
+  Internet or office network (VLAN 100 on the scheme);
 
 **Floating** network 
-  Used to get access to virtual machines from outside (shared L2-interface with 
-  Public network; in this case it's VLAN 101);
+  Virtual OpenStack network. IP address range of Public (External) network used to get access 
+  to virtual machines from outside (shared L2-interface with Public network; 
+  in this case it's VLAN 100); 
 
 **Management** network 
-  Is used for internal OpenStack communications (VLAN 102 on the scheme);
+  Virtual OpenStack network. May be mapped to detached physical interface. 
+  Is used for internal OpenStack communications (VLAN 101 on the scheme);
   
 **Storage** network 
-  Is used for Storage traffic (VLAN 103 on the scheme);
+  Virtual OpenStack network. May be mapped to detached physical interface.
+  Is used for Storage traffic (VLAN 102 on the scheme). OpenStack 
+  documentation mention this network as **Data Network**; 
 
 **Fixed** network
+  Virtual OpenStack network. May be mapped to detached physical interface. 
+  Exist if Nova Network is used to manage OpenStack networks.
   One (for flat mode) or more (for VLAN mode) virtual machines 
-  networks (VLAN 104 on the scheme).
+  networks (VLAN 103 on the scheme);
+  
+**Private** network
+  Virtual OpenStack network.  May be mapped to detached physical interface. 
+  Exists if Neutron with VLAN segmentation is used to manage OpenStack networks.
+  Neutron virtual network - similar to Fixed network in Nova Network, but without 
+  any access from outside. This network address range is used to create virtual
+  networks for VMs inside tenants;
 
 Mapping logical networks to physical interfaces on servers
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Fuel allows you to use different physical interfaces to handle different 
-types of traffic. When a node is added to the environment, click at the bottom 
-line of the node icon. In the detailed information window, click the "Configure 
+types of traffic. When a node is added to the environment, click at the Gear icon
+of the node bar. In the detailed information window, click the "Configure 
 Interfaces" button to open the physical interfaces configuration screen.
 
 .. image:: /_images/network_settings.jpg
@@ -146,7 +161,7 @@ Interfaces" button to open the physical interfaces configuration screen.
 On this screen you can drag-and-drop logical networks to physical interfaces 
 according to your network setup. 
 
-All networks are presented on the screen, except Fuel.
+Fuel Admin network has additional restriction.
 It runs on the physical interface from which node was initially PXE booted,
 and in the current version it is not possible to map it on any other physical 
 interface. Also, once the network is configured and OpenStack is deployed,
@@ -164,7 +179,7 @@ vendor-specific details to you. We will provide an example for a Cisco switch.
 
 First of all, you should configure access ports to allow non-tagged PXE booting 
 connections from all Slave nodes to the Fuel node. We refer this network 
-as the Fuel network.
+as the Admin (PXE) network.
 By default, the Fuel Master node uses the `eth0` interface to serve PXE 
 requests on this network, but this can be changed :ref:`during installation 
 <Network_Install>` of the Fuel Master node.
@@ -181,7 +196,7 @@ You also need to configure each of the switch's ports connected to nodes as an
 "STP Edge port" (or a "spanning-tree port fast trunk", according to Cisco 
 terminology). If you don't do that, DHCP timeout issues may occur.
 
-As long as the Fuel network is configured, Fuel can operate.
+As long as the Fuel Admin (PXE) network is configured, Fuel can operate.
 Other networks are required for OpenStack environments, and currently all of 
 these networks live in VLANs over the one or multiple physical interfaces on a 
 node. This means that the switch should pass tagged traffic, and untagging is done
@@ -258,8 +273,8 @@ correspondingly, and assign IP addresses for adapters:
   vboxnet1 - 172.16.1.1/24, 
   vboxnet2 - 172.16.0.1/24.
 
-For the demo environment on VirtualBox, the first network adapter is used to run Fuel 
-network traffic, including PXE discovery.
+For the demo environment on VirtualBox, the first network adapter is used to run 
+Fuel Admin network traffic, including PXE discovery.
 
 To access the Horizon and OpenStack RESTful API via Public network from the host machine,
 it is required to have route from your host to the Public IP address on the OpenStack Controller.

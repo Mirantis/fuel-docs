@@ -43,14 +43,35 @@ unify different classes of data into a single shared pool of storage
 nodes that can handle all classes of data important for OpenStack.
 Instead of having to copy OS images and volumes between separate Glance,
 Cinder, and Nova storage pools, you can have all three services use
-copy-on-write clones of the same objects. In addition to better
+copy-on-write clones of the original image. In addition to better
 utilization of storage capacity, copy-on-write also significantly speeds
 up launching VMs from images.
 
-To take advantage of the copy-on-write capability of the Ceph backend,
-you should only use images in **raw** format. Images in other formats such
-as qcow2 have to be converted to raw format first and cannot be cloned
-without conversion.
+To make the most out of the copy-on-write capability of the Ceph
+backend, you should only use images in **raw** format. Images in other
+formats such as qcow2 have to be converted to raw format first and
+cannot be cloned without conversion.
+
+As of this writing, vanilla OpenStack Havana release placed several
+important limitations on the copy-on-write capability of the Ceph
+backend:
+
+ * You have to create an RBD backed bootable volume from a raw image for
+   copy-on-write and live migrations to work;
+
+ * Launching an instance directly from image results in a full copy on
+   the compute node instead of a copy-on-write clone in Ceph;
+
+ * Ephemeral drives are stored in local files on compute nodes instead
+   of Ceph, preventing live migration of instances with ephemenral
+   drives;
+
+ * Non-raw images are not converted to raw automatically when creating a
+   bootable volume: if you don't convert the image yourself, you will
+   end up with a clone of a qcow2 image that will not be bootable.
+
+These limitations are removed in Mirantis OpenStack distribution
+starting with release 4.0.
 
 Object Storage for Applications
 -------------------------------
@@ -77,8 +98,8 @@ Block Storage for Volumes
 -------------------------
 
 When you configure Mirantis OpenStack to use the default **LVM** backend
-for Cinder block devices, Cinder will store each volume as a file on a
-logical partition on one of your Cinder nodes.
+for Cinder block devices, Cinder will store each volume as a logical
+volume in an LVM volume group on one of your Cinder nodes.
 
 If you don't need your volumes to be resilient, you can let Fuel create
 a JBOD partition spanning all your storage drives in a node during

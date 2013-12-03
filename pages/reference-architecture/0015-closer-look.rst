@@ -13,7 +13,8 @@ In this section, you'll learn more about the Multi-node with HA
 deployment configuration and how it achieves high availability. As you may 
 recall, this configuration looks something like this:
 
-.. image:: /_images/deployment-ha-compact_svg.jpg
+.. image:: /_images/deployment-ha-compact.*
+  :width: 100%
   :align: center
 
 OpenStack services are interconnected by RESTful HTTP-based APIs and
@@ -25,7 +26,8 @@ rely on their respective active/active and active/passive modes for high availab
 For example, RabbitMQ uses built-in clustering capabilities, while the
 database uses MySQL/Galera replication.
 
-.. image:: /_images/ha-overview_svg.jpg
+.. image:: /_images/ha-overview.*
+  :width: 100%
   :align: center
 
 Lets take a closer look at what an OpenStack deployment looks like, and

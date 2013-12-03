@@ -22,7 +22,8 @@ As you may recall, the database uses Galera to achieve HA, and Galera is
 a quorum-based system. That means that you should have at least 3
 controller nodes.
 
-.. image:: /_images/logical-diagram-controller_svg.jpg
+.. image:: /_images/logical-diagram-controller.*
+  :width: 100%
   :align: center
 
 Every OpenStack controller runs HAProxy, which manages a single External
@@ -64,7 +65,8 @@ as RabbitMQ and MySQL. They use the same approach that provides
 redundancy to the end-users of Horizon and REST APIs, reaching out to
 controller nodes using the VIP and going through HAProxy.
 
-.. image:: /_images/logical-diagram-compute_svg.jpg
+.. image:: /_images/logical-diagram-compute.*
+  :width: 100%
   :align: center
 
 Storage Nodes
@@ -82,17 +84,26 @@ and enough Ceph OSD nodes to satisfy the `object replication factor
 
 .. _Ceph: http://ceph.com/docs/master/architecture/
 
-.. image:: /_images/ceph_nodes_svg.jpg
+.. image:: /_images/ceph_nodes.*
+  :width: 100%
   :align: center
 
-Swift Storage and Proxy services also can run on controller nodes. This
-reduces the minimum number of nodes required to create a small OpenStack
-environment, but for a larger production environment you will need
-dedicated nodes: two for Swift Proxy and at least three for Swift
-Storage. Swift API relies on the same HAProxy setup with VIP on
-controller nodes as the other REST APIs.
+Swift API relies on the same HAProxy setup with VIP on controller nodes
+as the other REST APIs. If don't expect too much data traffic in Swift,
+you can also deploy Swift Storage and Proxy services on controller
+nodes. For a larger production environment you'll need dedicated nodes:
+two for Swift Proxy and at least three for Swift Storage.
 
-.. image:: /_images/logical-diagram-storage_svg.jpg
+Whether or not you'd want separate Swift nodes depends primarily on how
+much data you expect to keep there. A simple test is to fully populate
+your Swift object store with data and then fail one controller node. If
+replication of the degraded Swift objects between the remaining nodes
+controller generates enough network traffic, CPU load, or disk I/O to
+impact performance of other OpenStack services running on the same
+nodes, you should separate Swift from controllers.
+
+.. image:: /_images/logical-diagram-storage.*
+  :width: 100%
   :align: center
 
 If you select Cinder LVM as the block storage backend for Cinder

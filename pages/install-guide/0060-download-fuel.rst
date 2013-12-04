@@ -8,7 +8,7 @@ Downloading Fuel
 ================
 
 Before installation, download the installation image from the `Mirantis
-web-site <http://fuel.mirantis.com/redirect-page/>`_.
+web-site <http://software.mirantis.com>`_.
 
 .. note::  You must sign in to download the Fuel image.
 

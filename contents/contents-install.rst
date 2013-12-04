@@ -3,7 +3,7 @@
 .. _ToC:
 
 .. toctree:: Table of Contents
-  :maxdepth: 2
+   :maxdepth: 2
 
 .. include:: /pages/preface/preface.rst
 .. include:: /pages/install-guide/0000-intro.rst

@@ -44,7 +44,7 @@ OpenStack Health Checks can now be launched from the Fuel CLI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In previous releases, the OpenStack Health Check tests could be launched from the Fuel
 UI or API. In Mirantis OpenStack 3.2.1, these tests can now be launched from the Fuel CLI
-as well. This enables you to run sanity checks for a deployed environment from the
+as well. This enables user to run sanity checks for a deployed environment from the
 command line.
 
 Known Issues in Mirantis OpenStack 3.2.1
@@ -58,17 +58,16 @@ In case of installation of several roles on the node deployment
 finishes with READY status (with all nodes set to 'ready'),
 albeit the second role is not applied on the some nodes. In this
 case additional run of puppet on the failed nodes is required by
-issuing 'puppet agent -tvd' command.
+issuing 'puppet agent -t' command.
 
 Issues with Neutron-enabled installations when using certain NIC models
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Some drivers for legacy and virtual Ethernet adapters--for example, e1000, r8139 or
-vmxnet--may not work with OpenVSwitch Neutron-enabled CentOS/RHEL installations. A
-workaround for this issue is is to use the VLAN splinters Open vSwitch flag, which can be
+Some drivers for legacy and virtual Ethernet adapters - for example, e1000, r8139 or
+vmxnet - may not work with OpenVSwitch Neutron-enabled CentOS/RHEL installations. A
+workaround for this issue is to use the VLAN splinters Open vSwitch flag, which can be
 enabled in the UI by checking the VLAN splinters checkbox on the Settings tab in you
 environment. However, this option introduces performance issues and is not
-recommended to be used with more than 256 VLANs for VLAN splinter-enabled
-environments.
+recommended to be used with more than 256 VLANs for Quantum VLAN mode.
 
 Poor network performance in Neutron-enabled configurations for virtio-enabled VMs on CentOS and RHEL
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -77,13 +76,16 @@ networking code into the CentOS/RHEL kernel, which affects the performance of vi
 machines using the paravirtualized VirtIO network adapters. A known workaround is to
 disable Generic and TCP Segmentation Offload on the VMs by issuing the following
 commands:
-`ethtool -K <iface_name> gso off`
-`ethtool -K <iface_name> tso off`
+
+'ethtool -K <iface_name> gso off'
+
+'ethtool -K <iface_name> tso off'
 
 Health Check Platform tests have been fixed injection into VMs fails on CentOS
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 VM creation may with the following error:
-`ERROR: Error injecting data into image`
+
+'ERROR: Error injecting data into image'
 
 In this situation, nova service will fail to inject files into VM instances.
 This is due to a nova/qemu bug that may be related to an incorrect path but
@@ -119,7 +121,7 @@ Mirantis OpenStack Health Check Platform tests were introduced in Mirantis OpenS
 3.2. They ensure that the platform-level services operate correctly after an OpenStack
 environment is deployed. Heat, Savanna, and Murano services are verified by platform
 tests. However, due to a bug, the tests occasionally did not work properly. The issue has
-been fixed in Mirantis OpenStack 3.2.1 and the tests should now work consistently.
+been fixed in Mirantis OpenStack 3.2.1 and the tests works consistently now.
 
 Red Hat deployments time out while registering to an RHN Satellite Server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -145,22 +147,22 @@ https://bugs.launchpad.net/fuel/+bug/1249426
 https://bugs.launchpad.net/fuel/+bug/1253099
 
 Several race conditions have been fixed in the HA mode for the Pacemaker services,
-which we introduced by incorrectly coding the Corosync Puppet libraries and the
+which were introduced by incorrectly coding the Corosync Puppet libraries and the
 corresponding parts of services manifests, including “Illegal seek” and “Execution expired”
 errors. These race conditions have now been corrected.
 
 Nova-compute service is unable to restart if at least one active instance exists on the compute node
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Restarts of nova-compute services failed in Neutron-enabled configurations due to the
-wrong file access writes for the Neutron rootwrap directory. This required additional steps
+wrong file access rights for the Neutron rootwrap directory. This requires additional steps
 to be done to make Compute nodes work after restarting the nova-compute services or
-rebooting the Compute node. This condition has been addressed and a nova-compute
+rebooting the Compute node. This condition has been addressed and nova-compute
 service can now restart even if an active instance exists on the Compute node.
 
 Ubuntu NIC naming inconsistent with the discovered interface names
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Interface names were previously inconsistent due to the differences between the bootstrap
-image and Ubuntu kernels. These inconsistencies caused a failure in the deployment process.
+image` and Ubuntu kernels. These inconsistencies caused a failure in the deployment process.
 Explicit udev rules have been implemented so that provisioning may consistently identify interface names.
 
 Ceph did not work with dedicated journal drives

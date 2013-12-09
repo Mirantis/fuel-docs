@@ -1,7 +1,7 @@
 .. index:: Neutron vs. nova-network, Quantum vs. nova-network
 
 Neutron vs. nova-network
-========================
+------------------------
 
 Neutron (formerly Quantum) is a service which provides Networking-as-a-Service 
 functionality in OpenStack. It has a rich tenant-facing API for defining 
@@ -24,7 +24,7 @@ Fuel sets up Neutron components on each of the controllers to act as a router
 in HA (if deploying in HA mode).
 
 Terminology
------------
+~~~~~~~~~~~
 
 * **Public network** (also known as External network) used for Internet 
   access for all nodes.
@@ -45,7 +45,8 @@ Terminology
 * **NIC** network interface card (ethernet adapter).
 
 Overview
---------
+~~~~~~~~
+
 OpenStack networking with Neutron (Quantum) has some differences from 
 Nova-network. Neutron is able to virtualize and manage both layer 2 (logical) 
 and layer 3 (network) of the OSI network model, as compared to simple layer 3 
@@ -94,22 +95,22 @@ like this:
   
 The most likely configuration for different number NICs on cluster nodes:
 
-+------+--------------------------------------------+--------------------------------------------+ 
-| NICs | VLAN                                       |                        GRE                 | 
-+======+============================================+============================================+ 
-|   2  |  Not supported                             | .. image:: /_images/q32_gre_2nic_svg.jpg   | 
-|      |                                            |    :align: center                          |
-+------+--------------------------------------------+--------------------------------------------+
-|   3  | .. image:: /_images/q32_vlan_3nic_svg.jpg  | .. image:: /_images/q32_gre_3nic_svg.jpg   |
-|      |    :align: center                          |    :align: center                          |
-+------+--------------------------------------------+--------------------------------------------+
-|   4  | .. image:: /_images/q32_vlan_4nic_svg.jpg  | .. image:: /_images/q32_gre_4nic_svg.jpg   |
-|      |    :align: center                          |    :align: center                          |
-+------+--------------------------------------------+--------------------------------------------+
++------+--------------------------------------+-------------------------------------+
+| NICs | VLAN                                 |                  GRE                |
++======+======================================+=====================================+
+|   2  |  Not supported                       | .. image:: /_images/q32_gre_2nic.*  |
+|      |                                      |    :align: center                   |
++------+--------------------------------------+-------------------------------------+
+|   3  | .. image:: /_images/q32_vlan_3nic.*  | .. image:: /_images/q32_gre_3nic.*  |
+|      |    :align: center                    |    :align: center                   |
++------+--------------------------------------+-------------------------------------+
+|   4  | .. image:: /_images/q32_vlan_4nic.*  | .. image:: /_images/q32_gre_4nic.*  |
+|      |    :align: center                    |    :align: center                   |
++------+--------------------------------------+-------------------------------------+
 
 
 Known limitations
------------------
+~~~~~~~~~~~~~~~~~
 
 * Neutron will not allocate a floating IP range for your tenants. After each 
   tenant is created, a floating IP range must be created. Note that this does 
@@ -141,7 +142,7 @@ Known limitations
   at least 3 NICs.
 
 FAQ
----
+~~~
 
 | Q: I tried to deploy a Fuel OpenStack environment on VirtualBox, but the 
      deployment fails on Neutron setup. How do I fix this?

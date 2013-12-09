@@ -17,7 +17,8 @@ single points of failure. That's not to say, however, that you can't
 reduce hardware requirements by combining your storage, network, and controller
 nodes:
 
-.. image:: /_images/deployment-ha-compact_svg.jpg
+.. image:: /_images/deployment-ha-compact.*
+  :width: 100%
   :align: center
 
 We'll take a closer look at the details of this deployment configuration in 

@@ -104,7 +104,7 @@ Configuring the network
 Once you choose a networking mode (FlatDHCP/VLAN), you must configure equipment 
 accordingly. The diagram below shows an example configuration.
 
-.. image:: /_images/physical-network.jpg
+.. image:: /_images/physical-network.png
   :width: 100%
   :align: center
 
